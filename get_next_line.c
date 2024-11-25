@@ -6,7 +6,7 @@
 /*   By: agraille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 09:01:26 by agraille          #+#    #+#             */
-/*   Updated: 2024/11/25 15:49:36 by agraille         ###   ########.fr       */
+/*   Updated: 2024/11/25 16:39:12 by agraille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,9 @@
 
 size_t	get_next_line(int fd)
 {
-	char	*buffer;
-	size_t	oc_read;
+	char			*buffer;
+	static char		*temp;
+	size_t			oc_read;
 
 	if (fd < 0)
 		return (0);

@@ -47,8 +47,8 @@
         <mxCell id="sR5y7cmOGe-FrkhTUdvG-10" style="edgeStyle=none;curved=1;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontSize=12;startSize=8;endSize=8;" edge="1" parent="1" source="sR5y7cmOGe-FrkhTUdvG-4" target="sR5y7cmOGe-FrkhTUdvG-8">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="sR5y7cmOGe-FrkhTUdvG-4" value="Lire une seul ligne a chaque app&lt;span style=&quot;background-color: initial;&quot;&gt;el&lt;/span&gt;&lt;div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;/div&gt;" style="whiteSpace=wrap;html=1;fontSize=13;fontFamily=Verdana;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;startSize=26;swimlaneFillColor=#ffffff;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;verticalAlign=top;" vertex="1" parent="1">
-          <mxGeometry x="85" y="440" width="110" height="50" as="geometry" />
+        <mxCell id="sR5y7cmOGe-FrkhTUdvG-4" value="Lire une seul ligne a chaque app&lt;span style=&quot;background-color: initial;&quot;&gt;el +&lt;/span&gt;&lt;div&gt;return avec \n&lt;br&gt;&lt;div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;" style="whiteSpace=wrap;html=1;fontSize=13;fontFamily=Verdana;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;startSize=26;swimlaneFillColor=#ffffff;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="85" y="440" width="110" height="60" as="geometry" />
         </mxCell>
         <mxCell id="sR5y7cmOGe-FrkhTUdvG-11" style="edgeStyle=none;curved=1;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontSize=12;startSize=8;endSize=8;" edge="1" parent="1" source="sR5y7cmOGe-FrkhTUdvG-6" target="sR5y7cmOGe-FrkhTUdvG-1">
           <mxGeometry relative="1" as="geometry" />
@@ -85,9 +85,6 @@
             <mxPoint x="699" y="296" as="sourcePoint" />
             <mxPoint x="750" y="370" as="targetPoint" />
           </mxGeometry>
-        </mxCell>
-        <mxCell id="sR5y7cmOGe-FrkhTUdvG-39" style="edgeStyle=none;curved=1;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0;exitDx=80;exitDy=15;exitPerimeter=0;fontSize=12;startSize=8;endSize=8;" edge="1" parent="1" source="sR5y7cmOGe-FrkhTUdvG-34" target="sR5y7cmOGe-FrkhTUdvG-6">
-          <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="sR5y7cmOGe-FrkhTUdvG-40" value="" style="edgeStyle=none;curved=1;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=12;startSize=8;endSize=8;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" target="X8jP_-pNWwgTqy4V8r5L-8">
           <mxGeometry relative="1" as="geometry">

@@ -5,28 +5,28 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: agraille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/25 09:01:26 by agraille          #+#    #+#             */
-/*   Updated: 2024/11/25 16:39:12 by agraille         ###   ########.fr       */
+/*   Created: 2024/11/26 08:00:05 by agraille          #+#    #+#             */
+/*   Updated: 2024/11/26 08:38:22 by agraille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include "fcntl.h"
 
-size_t	get_next_line(int fd)
+char	*get_next_line(int fd)
 {
 	char			*buffer;
 	static char		*temp;
 	size_t			oc_read;
 
 	if (fd < 0)
-		return (0);
+		return (NULL);
 	buffer = malloc(BUFFER_SIZE + 1);
 	if (!buffer)
-		return (0);
+		return (NULL);
 	oc_read = read(fd, buffer, BUFFER_SIZE);
-	if (oc_read == -1)
-		return (0);
+	if (oc_read == -1 && oc_read == 0)
+		return (NULL);
 	free(buffer);
 	return (oc_read);
 }

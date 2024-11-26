@@ -6,41 +6,40 @@
 /*   By: agraille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 08:00:05 by agraille          #+#    #+#             */
-/*   Updated: 2024/11/26 11:31:09 by agraille         ###   ########.fr       */
+/*   Updated: 2024/11/26 17:06:12 by agraille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include "fcntl.h"
 
-static char	*rest_reset(char *rest)
+int	ft_init(t_list **buffer)
 {
-	rest = NULL;
+	if (!*buffer)
+	{
+		*buffer = (t_list *)malloc(sizeof(t_list));
+		if (!*buffer)
+			return (0);
+		(*buffer)->content = NULL;
+		(*buffer)->next = NULL;
+	}
+	return (1);
 }
 
 char	*get_next_line(int fd)
 {
-	char			*buffer;
-	char			*temp;
-	static char		*rest;
-	size_t			oc_read;
+	static t_list	*buffer;
+	char			*line;
+	size_t			readed;
 
-	if (fd < 0)
+	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
 		return (NULL);
-	buffer = malloc(BUFFER_SIZE + 1);
-	if (!buffer)
+	if (ft_init(&buffer))
 		return (NULL);
-	oc_read = read(fd, buffer, BUFFER_SIZE);
-	if (oc_read == -1 || oc_read == 0)
-	{
-		free(buffer);
-		return (NULL);
-	}
-	free(buffer);
-	return (temp);
+	return (line);
 }
 
-int	main (void)
+int	main(void)
 {
 	int	fd = open("test.txt", O_RDONLY);
 

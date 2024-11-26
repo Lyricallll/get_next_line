@@ -6,20 +6,35 @@
 /*   By: agraille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 09:01:28 by agraille          #+#    #+#             */
-/*   Updated: 2024/11/26 11:35:45 by agraille         ###   ########.fr       */
+/*   Updated: 2024/11/26 16:35:04 by agraille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*ft_strcat(char *rest, char *buffer)
+char	*ft_strjoin(//list ?)
 {
-	size_t	j;
+	size_t	size_of_string_return;
+	char	*tab_return;
+	size_t	i;
 
-	j = 0;
-	while (*rest)
-		j++;
-	while (*buffer)
-		rest[j++] = *buffer++;
-	return (rest);
+	i = 0;
+	size_of_string_return = ft_strlen(s1) + ft_strlen(s2);
+	tab_return = malloc(size_of_string_return + 1);
+	if (!tab_return)
+		return (NULL);
+	while (*s1)
+	{
+		tab_return[i] = *s1;
+		i++;
+		s1++;
+	}
+	while (*s2)
+	{
+		tab_return[i] = *s2;
+		i++;
+		s2++;
+	}
+	tab_return[i] = '\0';
+	return (tab_return);
 }

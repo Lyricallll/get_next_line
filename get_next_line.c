@@ -6,15 +6,17 @@
 /*   By: agraille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 08:00:05 by agraille          #+#    #+#             */
-/*   Updated: 2024/11/27 13:09:59 by agraille         ###   ########.fr       */
+/*   Updated: 2024/11/27 13:27:19 by agraille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
+// fonction qui free toute la chaine 
+
 int	ft_init(t_chain **buffer)
 {
-	 t_chain *current;
+	 t_chain	*current;
 	 
 	if (!*buffer)
 	{
@@ -31,8 +33,8 @@ int	ft_init(t_chain **buffer)
     if (!current->next)
         return (0);
     current->next->next = NULL;
-    return (1);
 	}
+    return (1);
 }
 
 void	ft_read_and_stock(int fd, t_chain **buffer)
@@ -42,10 +44,12 @@ void	ft_read_and_stock(int fd, t_chain **buffer)
 	readed = 1;
 	while (readed = 1)
 	{
-		readed = read(fd, *buffer->content, BUFFER_SIZE);
+		readed = read(fd, (*buffer)->content, BUFFER_SIZE);
 		if (readed > 0)
 		{
-			*buffer = *buffer->next;
+			//check si \n trouve 
+			// new node
+			*buffer = (*buffer)->next;
 		}
 	}
 }
@@ -61,8 +65,8 @@ char	*get_next_line(int fd)
 		//tout free
 		return (NULL);
 	ft_read_and_stock(fd, &buffer);
-	line = //remplir en liberant les node
-	return (line);
+	line = 'l' ;//remplir en liberant les node
+	return (NULL);
 }
 
 // int	main(void)

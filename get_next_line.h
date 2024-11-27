@@ -6,7 +6,7 @@
 /*   By: agraille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 09:01:25 by agraille          #+#    #+#             */
-/*   Updated: 2024/11/26 15:36:57 by agraille         ###   ########.fr       */
+/*   Updated: 2024/11/27 08:45:29 by agraille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@
 
 typedef struct s_gnl
 {
-	char			*content;
+	char			content[BUFFER_SIZE + 1];
 	struct s_gnl	*next;
-}	t_list;
+}	t_chain;
 
 #endif

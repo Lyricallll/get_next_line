@@ -6,75 +6,76 @@
 /*   By: agraille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 08:00:05 by agraille          #+#    #+#             */
-/*   Updated: 2024/11/27 14:41:45 by agraille         ###   ########.fr       */
+/*   Updated: 2024/11/27 23:17:27 by agraille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-// fonction qui free toute la chaine 
+char	*ft_extract_line(t_chain **buffer)
+{
+	// Combiner le contenu des nœuds jusqu'à '\n' ou NULL
+	// Libérer les nœuds déjà utilisés
+}
+
 
 int	ft_init(t_chain **buffer)
 {
-	 t_chain	*current;
-	 
 	if (!*buffer)
 	{
 		*buffer = (t_chain *)malloc(sizeof(t_chain));
 		if (!*buffer)
 			return (0);
+		(*buffer)->cut_pos = NULL;
 		(*buffer)->next = NULL;
-    current = *buffer;
-    while (current->next != NULL)
-    {
-        current = current->next;
-    }
-	current->next = (t_chain *)malloc(sizeof(t_chain));
-    if (!current->next)
-        return (0);
-    current->next->next = NULL;
-	}
     return (1);
+	}
 }
 
-void	ft_read_and_stock(int fd, t_chain **buffer)
+ssize_t	ft_read_and_stock(int fd, t_chain **buffer)
 {
-	ssize_t			readed;
-	
+	t_chain	*current;
+	ssize_t	readed;
+
+	current = *buffer;
 	readed = 1;
-	while (readed == 1)
+	while (readed > 0)
 	{
-		readed = read(fd, (*buffer)->content, BUFFER_SIZE);
+		readed = read(fd, current->content, BUFFER_SIZE);
 		if (readed > 0)
 		{
-			//check si \n trouve 
-			// new node
-			*buffer = (*buffer)->next;
+			current->content[readed] = '\0';
+			current->cut_pos = strchr(current->content, '\n');
+				// break;
+			if (!current->cut_pos)
+			{
+				current->next = (t_chain *)malloc(sizeof(t_chain));
+				if (!current->next)
+					return;
+				current = current->next;
+				current->cut_pos = NULL;
+				current->next = NULL;
+			}
 		}
-		//if 0 fin de fichier et free tout print le restant du buffer 
-		//if -1 exit fast 
 	}
+	return (readed);
 }
 
 char	*get_next_line(int fd)
 {	static t_chain	*buffer;
 	char			*line;
 
-	if (!ft_init(&buffer))
+	if (fd < 0 || BUFFER_SIZE <= 0 || !ft_init(&buffer))
 		return (NULL);
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
-		//tout free
-		return (NULL);
-	ft_read_and_stock(fd, &buffer);
-	line = 'l' ;//remplir en liberant les node
-	return (NULL);
+	if (!ft_read_and_stock(fd, &buffer))
+		return (NULL); // revoir cette condition pour gerer 
+						//la fin de fichier et le read -1
+	line = ft_extract_line(&buffer);
+	if (line[0] == 0)
+	{
+		free(line);
+		ft_free_chain(buffer);
+		return(NULL);
+	}
+	return (line);
 }
-
-// int	main(void)
-// {
-// 	int	fd = open("test.txt", O_RDONLY);
-
-// 	printf("%s",get_next_line(fd));
-// 	close(fd);
-// 	return (0);
-// }

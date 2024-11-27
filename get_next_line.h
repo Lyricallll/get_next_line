@@ -6,7 +6,7 @@
 /*   By: agraille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 09:01:25 by agraille          #+#    #+#             */
-/*   Updated: 2024/11/27 13:17:45 by agraille         ###   ########.fr       */
+/*   Updated: 2024/11/27 14:47:04 by agraille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
-# include "fcntl.h"
+# include <fcntl.h>
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 0
+#  define BUFFER_SIZE 2
 
 # endif
 
@@ -30,3 +30,4 @@ typedef struct s_gnl
 }	t_chain;
 
 #endif
+

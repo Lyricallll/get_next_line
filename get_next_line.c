@@ -6,7 +6,7 @@
 /*   By: agraille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 08:00:05 by agraille          #+#    #+#             */
-/*   Updated: 2024/11/27 13:27:19 by agraille         ###   ########.fr       */
+/*   Updated: 2024/11/27 14:41:45 by agraille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	ft_read_and_stock(int fd, t_chain **buffer)
 	ssize_t			readed;
 	
 	readed = 1;
-	while (readed = 1)
+	while (readed == 1)
 	{
 		readed = read(fd, (*buffer)->content, BUFFER_SIZE);
 		if (readed > 0)
@@ -51,12 +51,13 @@ void	ft_read_and_stock(int fd, t_chain **buffer)
 			// new node
 			*buffer = (*buffer)->next;
 		}
+		//if 0 fin de fichier et free tout print le restant du buffer 
+		//if -1 exit fast 
 	}
 }
 
 char	*get_next_line(int fd)
-{
-	static t_chain	*buffer;
+{	static t_chain	*buffer;
 	char			*line;
 
 	if (!ft_init(&buffer))

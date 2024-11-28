@@ -6,7 +6,7 @@
 /*   By: agraille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 08:00:05 by agraille          #+#    #+#             */
-/*   Updated: 2024/11/28 11:35:30 by agraille         ###   ########.fr       */
+/*   Updated: 2024/11/29 00:36:10 by agraille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ ssize_t	ft_read_and_stock(int fd, t_chain **buffer)
 		}
 		if (readed == 0)
 			return (1);
+		if (readed == -1)
+			return (-1);
 	}
 	return (readed);
 }
@@ -100,9 +102,12 @@ int main(void)
     if (!ptr)
         return (printf("ptr null"));
     current = ptr;
+	int i = 1;
     while (current)
     {
-        printf("%s", current->content);
+		printf("NODE = %d\n",i);
+        printf("%s\n", current->content);
+		i++;
         current = current->next;      
     }
 

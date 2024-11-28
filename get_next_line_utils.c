@@ -6,7 +6,7 @@
 /*   By: agraille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 09:01:28 by agraille          #+#    #+#             */
-/*   Updated: 2024/11/27 22:17:37 by agraille         ###   ########.fr       */
+/*   Updated: 2024/11/28 11:24:22 by agraille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,4 +35,5 @@ void	ft_free_chain(t_chain **buffer)
 		free(*buffer);
 		*buffer = tmp;
 	}
+	*buffer = NULL;
 }

@@ -6,7 +6,7 @@
 /*   By: agraille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 09:01:25 by agraille          #+#    #+#             */
-/*   Updated: 2024/11/29 11:16:06 by agraille         ###   ########.fr       */
+/*   Updated: 2024/11/29 13:05:49 by agraille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,19 +19,20 @@
 # include <fcntl.h>
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 500
+#  define BUFFER_SIZE 5
 # endif
 
 typedef struct s_gnl
 {
 	char			content[BUFFER_SIZE + 1];
 	char			*cut_pos;
-	ssize_t			len;
 	struct s_gnl	*next;
 }	t_chain;
 
 char	*ft_strchr(char *s, int c);
 void	ft_free_chain(t_chain **buffer);
+ssize_t	ft_strlen(char *s);
+char	*ft_copy(char *line, ssize_t len_malloc, t_chain **buffer);
 
 #endif
 

@@ -6,7 +6,7 @@
 /*   By: agraille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 08:00:05 by agraille          #+#    #+#             */
-/*   Updated: 2024/11/29 11:16:04 by agraille         ###   ########.fr       */
+/*   Updated: 2024/11/29 13:35:16 by agraille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,20 +15,18 @@
 char	*ft_extract_line(t_chain **buffer, char *line)
 {
 	t_chain		*count_len;
-	t_chain 	*for_copy;
 	ssize_t		len_malloc;
 	
-	len_malloc = 1;
+	len_malloc = 0;
 	count_len = *buffer;
-	for_copy = *buffer;
+	line = NULL;
 	while (count_len != NULL)
 	{
-		len_malloc += count_len->len;
+		len_malloc += ft_strlen(count_len->content);
 		count_len = count_len->next;
 	}
-	printf("LA LEN EST DE : %zd\n",len_malloc);
-	// line = malloc(sizeof(char) * len_malloc + 1);
-	// line[len_malloc] = '\0';
+	line = ft_copy(line, len_malloc, buffer);
+	//sauvegarder apres le \n et reset la chaine 
 	return (line);
 }
 
@@ -41,7 +39,6 @@ int	ft_init(t_chain **buffer)
 			return (0);
 		(*buffer)->cut_pos = NULL;
 		(*buffer)->next = NULL;
-		(*buffer)->len = 0;
 		(*buffer)->content[0] = '\0';
 	}
     return (1);
@@ -60,7 +57,6 @@ ssize_t	ft_read_and_stock(int fd, t_chain **buffer)
 		if (readed > 0)
 		{
 			current->content[readed] = '\0';
-			current->len = readed;
 			current->cut_pos = ft_strchr(current->content, '\n');
 			if (current->cut_pos)
 				break;
@@ -72,7 +68,6 @@ ssize_t	ft_read_and_stock(int fd, t_chain **buffer)
 				current = current->next;
 				current->cut_pos = NULL;
 				current->next = NULL;
-				current->len = 0;
 				current->content[0] = '\0';
 			}
 		}
@@ -129,6 +124,7 @@ int main(void)
 	test = get_next_line(fd);
 	if (test == NULL)
 		printf("La line est null\n");
+	printf("1 : %s",test);
 	free(test);
     close(fd);
     return (0);

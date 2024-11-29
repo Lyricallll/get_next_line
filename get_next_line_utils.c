@@ -6,7 +6,7 @@
 /*   By: agraille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 09:01:28 by agraille          #+#    #+#             */
-/*   Updated: 2024/11/29 11:16:13 by agraille         ###   ########.fr       */
+/*   Updated: 2024/11/29 13:26:53 by agraille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,4 +36,48 @@ void	ft_free_chain(t_chain **buffer)
 		*buffer = tmp;
 	}
 	*buffer = NULL;
+}
+
+ssize_t	ft_strlen(char *s)
+{
+	ssize_t	i;
+	
+	i = 0;
+	while(s[i])
+	{
+		if (s[i] == '\n' )
+		{
+			i += 1;
+			break;
+		}
+		i++;
+	}
+	return (i);
+}
+
+char	*ft_copy(char *line, ssize_t len_malloc, t_chain **buffer)
+{
+	t_chain	*ptr;
+	ssize_t	i;
+	ssize_t	j;
+	
+	i = 0;
+	j = 0;
+	ptr = *buffer;
+	line = malloc(sizeof(char) * (len_malloc + 1));
+	if (!line)
+		return (NULL);
+	while (i < len_malloc)
+	{
+		line[i++] = ptr->content[j++];
+		if (ptr->content[j] == '\0')
+		{
+			if(ptr->next == NULL)
+				break;
+			j = 0;
+			ptr = ptr->next;
+		}
+	}
+	line[i] = '\0';
+	return (line);
 }

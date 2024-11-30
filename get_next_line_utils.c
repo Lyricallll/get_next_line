@@ -6,22 +6,22 @@
 /*   By: agraille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 09:01:28 by agraille          #+#    #+#             */
-/*   Updated: 2024/11/30 11:47:03 by agraille         ###   ########.fr       */
+/*   Updated: 2024/11/30 14:31:52 by agraille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*ft_strchr(char *s, int c)
+ssize_t	ft_strchr(char *s, int c)
 {
 	while (*s)
 	{
 		if (*s == c)
-			return ((char *) s);
+			return (1);
 		s++;
 	}
 	if (c == '\0')
-		return ((char *)s);
+		return (1);
 	return (0);
 }
 
@@ -75,6 +75,7 @@ char	*ft_copy(char *line, ssize_t len_malloc, t_chain **buffer)
 			if(ptr->next == NULL)
 				break;
 			j = 0;
+			free(ptr->content);
 			ptr = ptr->next;
 		}
 	}
@@ -82,30 +83,3 @@ char	*ft_copy(char *line, ssize_t len_malloc, t_chain **buffer)
 	return (line);
 }
 
-void	*ft_memmove(void *dest, const void *src, ssize_t n)
-{
-	unsigned char			*dest_copy;
-	const unsigned char		*src_copy;
-	ssize_t					i;
-
-	if (dest == NULL && src == NULL)
-		return (NULL);
-	dest_copy = (unsigned char *)dest;
-	src_copy = (const unsigned char *)src;
-	if (dest_copy > src_copy)
-	{
-		i = n;
-		while (i-- > 0)
-			dest_copy[i] = src_copy[i];
-	}
-	else
-	{
-		i = 0;
-		while (i < n)
-		{
-			dest_copy[i] = src_copy[i];
-			i++;
-		}
-	}
-	return (dest);
-}

@@ -6,11 +6,44 @@
 /*   By: agraille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 08:00:05 by agraille          #+#    #+#             */
-/*   Updated: 2024/11/29 13:35:16 by agraille         ###   ########.fr       */
+/*   Updated: 2024/11/30 11:55:16 by agraille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+t_chain	*ft_reset_from_cut(t_chain **head)
+{
+	t_chain	*tmp;
+	ssize_t	remaining_len;
+
+	// Si cut_pos est trouvé
+	if (*head && (*head)->cut_pos)
+	{
+		// Vérifiez si le '\n' est présent dans le cut_pos
+		if ((*head)->cut_pos[0] == '\n')
+		{
+			// Si cut_pos pointe directement sur '\n', nous devons avancer à l'élément suivant
+			tmp = (*head)->next;
+			free(*head);  // Libérer l'élément courant
+			*head = tmp;  // Passer au suivant
+		}
+		else
+		{
+			// Calculer la longueur des données restantes après le '\n'
+			remaining_len = ft_strlen((*head)->cut_pos + 1);
+
+			// Déplacer le contenu restant vers le début du tableau
+			ft_memmove((*head)->content, (*head)->cut_pos + 1, remaining_len);
+
+			// Réinitialiser cut_pos à NULL pour signaler qu'il n'y a plus de '\n' dans cette chaîne
+			// (*head)->cut_pos = NULL;
+		}
+	}
+	return (tmp);
+}
+
+
 
 char	*ft_extract_line(t_chain **buffer, char *line)
 {
@@ -23,7 +56,7 @@ char	*ft_extract_line(t_chain **buffer, char *line)
 	while (count_len != NULL)
 	{
 		len_malloc += ft_strlen(count_len->content);
-		count_len = count_len->next;
+			count_len = count_len->next;
 	}
 	line = ft_copy(line, len_malloc, buffer);
 	//sauvegarder apres le \n et reset la chaine 
@@ -80,9 +113,14 @@ char	*get_next_line(int fd)
 	static t_chain	*buffer;
 	char			*line;
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || !ft_init(&buffer))
+	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	if (!ft_read_and_stock(fd, &buffer))
+	if (!buffer)
+	{
+		if(!ft_init(&buffer))
+			return (NULL);
+	}
+	if (ft_read_and_stock(fd, &buffer) == -1)
 		return (NULL);
 	line = NULL;
 	line = ft_extract_line(&buffer, line);
@@ -90,7 +128,11 @@ char	*get_next_line(int fd)
 	{
 		ft_free_chain(&buffer);
 		return(NULL);
-	}
+	}printf("AVANT LA MISE A JOUR = %s\n",buffer->content);
+	printf("---------------------------\n");
+	buffer = ft_reset_from_cut(&buffer);
+	printf("APRES LA MISE A JOUR = %s\n",buffer->content);
+	printf("---------------------------\n");
 	return (line);
 }
 
@@ -126,6 +168,10 @@ int main(void)
 		printf("La line est null\n");
 	printf("1 : %s",test);
 	free(test);
+	// printf("---------------------------\n");
+	// test = get_next_line(fd);
+	// printf("2 : %s",test);
+	// free(test);
     close(fd);
     return (0);
 }

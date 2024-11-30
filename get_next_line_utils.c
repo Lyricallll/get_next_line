@@ -6,7 +6,7 @@
 /*   By: agraille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 09:01:28 by agraille          #+#    #+#             */
-/*   Updated: 2024/11/29 13:26:53 by agraille         ###   ########.fr       */
+/*   Updated: 2024/11/30 11:47:03 by agraille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,4 +80,32 @@ char	*ft_copy(char *line, ssize_t len_malloc, t_chain **buffer)
 	}
 	line[i] = '\0';
 	return (line);
+}
+
+void	*ft_memmove(void *dest, const void *src, ssize_t n)
+{
+	unsigned char			*dest_copy;
+	const unsigned char		*src_copy;
+	ssize_t					i;
+
+	if (dest == NULL && src == NULL)
+		return (NULL);
+	dest_copy = (unsigned char *)dest;
+	src_copy = (const unsigned char *)src;
+	if (dest_copy > src_copy)
+	{
+		i = n;
+		while (i-- > 0)
+			dest_copy[i] = src_copy[i];
+	}
+	else
+	{
+		i = 0;
+		while (i < n)
+		{
+			dest_copy[i] = src_copy[i];
+			i++;
+		}
+	}
+	return (dest);
 }

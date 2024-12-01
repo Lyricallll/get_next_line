@@ -6,19 +6,49 @@
 /*   By: agraille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 08:00:05 by agraille          #+#    #+#             */
-/*   Updated: 2024/12/01 11:59:34 by agraille         ###   ########.fr       */
+/*   Updated: 2024/12/01 12:54:30 by agraille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
+int ft_check_if_line_possible(t_chain **buffer, int fd)
+{
+    t_chain *check;
+    t_chain *initial_buffer;
+	
+    initial_buffer = *buffer;
+    check = *buffer;
+    while (check)
+    {
+        if (ft_strchr(check->content, '\n'))  // Si un '\n' est trouvé dans le contenu du nœud
+        {
+            return (1);
+        }
+        check = check->next;
+    }
+    if (!ft_add_node(buffer))
+    {
+        return (-1);
+    }
+    if (ft_read_and_stock(fd, buffer) == -1)
+    {
+        return (-1);
+    }
+    *buffer = initial_buffer;
+    printf("Content après ajout de nœud et lecture: %s\n", (*buffer)->content);
+    return (1);
+}
 
-char	*ft_extract_line(t_chain **buffer, char *line)
+char	*ft_extract_line(t_chain **buffer, char *line, int fd)
 {
 	t_chain		*check;
 	ssize_t		len_malloc;
 	size_t 		remaining_len;
 	char		*newline_pos;
+	
+	if (!ft_check_if_line_possible(buffer, fd))
+		return (NULL);
 	check = *buffer;
 	len_malloc = 0;
 	while (check)
@@ -32,15 +62,13 @@ char	*ft_extract_line(t_chain **buffer, char *line)
 		len_malloc += ft_strlen(check->content);
 		check = check->next;
 	}
-
 	line = ft_copy(line, len_malloc, buffer);
-
 	 if (newline_pos)
     {
     	remaining_len = ft_strlen(newline_pos + 1);
        ft_memmove((*buffer)->content, newline_pos + 1, remaining_len + 1);
     }
-	printf("BUFFER TETE DE LISTE APRES EXTRACT LINE= %s\n\n",(*buffer)->content);
+	// printf("BUFFER TETE DE LISTE APRES EXTRACT LINE= %s\n\n",(*buffer)->content);
 	return (line);
 }
 
@@ -112,8 +140,7 @@ char	*get_next_line(int fd)
 			return (NULL);
 	}
 	line = NULL;
-	line = ft_extract_line(&buffer, line);
-	// ft_free_chain(&buffer);
+	line = ft_extract_line(&buffer, line, fd);
 	return (line);
 }
 

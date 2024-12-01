@@ -6,7 +6,7 @@
 /*   By: agraille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 09:01:28 by agraille          #+#    #+#             */
-/*   Updated: 2024/12/01 11:48:34 by agraille         ###   ########.fr       */
+/*   Updated: 2024/12/01 12:18:03 by agraille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ char	*ft_strchr(char *s, int c)
 			return ((char *)s);
 		s++;
 	}
-	if (c == '\0')
-		return ((char *)s);
+	// if (c == '\0')
+	// 	return ((char *)s);
 	return (NULL);
 }
 

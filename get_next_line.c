@@ -6,7 +6,7 @@
 /*   By: agraille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 08:00:05 by agraille          #+#    #+#             */
-/*   Updated: 2024/12/01 12:54:30 by agraille         ###   ########.fr       */
+/*   Updated: 2024/12/01 15:30:47 by agraille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,30 +15,30 @@
 int ft_check_if_line_possible(t_chain **buffer, int fd)
 {
     t_chain *check;
-    t_chain *initial_buffer;
-	
-    initial_buffer = *buffer;
+    t_chain *original;
+
+    original = *buffer;
     check = *buffer;
     while (check)
     {
-        if (ft_strchr(check->content, '\n'))  // Si un '\n' est trouvé dans le contenu du nœud
+        if (ft_strchr(check->content, '\n'))
         {
             return (1);
         }
         check = check->next;
     }
-    if (!ft_add_node(buffer))
-    {
+
+    check = (t_chain *)malloc(sizeof(t_chain));
+    if (!check)
         return (-1);
-    }
-    if (ft_read_and_stock(fd, buffer) == -1)
-    {
-        return (-1);
-    }
-    *buffer = initial_buffer;
-    printf("Content après ajout de nœud et lecture: %s\n", (*buffer)->content);
-    return (1);
+	check->next = NULL;
+    check->content[0] = '\0';
+
+    *buffer = original;
+    printf("Content: %s\n", (*buffer)->content);
+    return (fd);
 }
+
 
 char	*ft_extract_line(t_chain **buffer, char *line, int fd)
 {
@@ -162,10 +162,10 @@ int main(void)
 		printf("LINE : %s", test); 
 		free(test);
 	printf("---------------------------------\n");
-		test = get_next_line(fd);
-		printf("LINE : %s", test); 
-		free(test);
-	printf("---------------------------------\n");
+		// test = get_next_line(fd);
+		// printf("LINE : %s", test); 
+		// free(test);
+	// printf("---------------------------------\n");
 	close(fd); 
 	return (0); 
 }

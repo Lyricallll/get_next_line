@@ -6,7 +6,7 @@
 /*   By: agraille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 09:01:28 by agraille          #+#    #+#             */
-/*   Updated: 2024/12/01 12:18:03 by agraille         ###   ########.fr       */
+/*   Updated: 2024/12/01 23:10:08 by agraille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,6 @@ char	*ft_strchr(char *s, int c)
 			return ((char *)s);
 		s++;
 	}
-	// if (c == '\0')
-	// 	return ((char *)s);
 	return (NULL);
 }
 
@@ -41,9 +39,9 @@ void	ft_free_chain(t_chain **buffer)
 ssize_t	ft_strlen(char *s)
 {
 	ssize_t	i;
-	
+
 	i = 0;
-	while(s[i])
+	while (s[i])
 		i++;
 	return (i);
 }
@@ -54,7 +52,7 @@ char	*ft_copy(char *line, ssize_t len_malloc, t_chain **buffer)
 	t_chain	*tmp;
 	ssize_t	i;
 	ssize_t	j;
-	
+
 	i = 0;
 	j = 0;
 	ptr = *buffer;
@@ -66,8 +64,8 @@ char	*ft_copy(char *line, ssize_t len_malloc, t_chain **buffer)
 		line[i++] = ptr->content[j++];
 		if (j >= BUFFER_SIZE || ptr->content[j] == '\0')
 		{
-			if(ptr->next == NULL)
-				break;
+			if (ptr->next == NULL)
+				break ;
 			j = 0;
 			tmp = ptr;
 			ptr = ptr->next;

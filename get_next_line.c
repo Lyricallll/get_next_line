@@ -6,90 +6,67 @@
 /*   By: agraille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 08:00:05 by agraille          #+#    #+#             */
-/*   Updated: 2024/11/30 22:12:21 by agraille         ###   ########.fr       */
+/*   Updated: 2024/12/01 11:59:34 by agraille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-void	ft_update_buffer(t_chain **buffer)
-{
-	t_chain *current;
-	char *newline_pos;
-
-	current = *buffer;
-	newline_pos = ft_strchr(current->content, '\n');
-	if (newline_pos)
-		ft_memmove(current->content, newline_pos + 1, ft_strlen(newline_pos + 1) + 1);
-	else
-		current->content[0] = '\0';
-}
 
 char	*ft_extract_line(t_chain **buffer, char *line)
 {
-	// t_chain		*current;
 	t_chain		*check;
 	ssize_t		len_malloc;
-
-	// current = *buffer;
+	size_t 		remaining_len;
+	char		*newline_pos;
 	check = *buffer;
-	printf("CHECk = %s",check->content);
 	len_malloc = 0;
-	 while (check)
-    {
-        len_malloc += ft_strlen(check->content);
-		printf("%ld = LEN MALLOC\n",len_malloc);
-        // if (ft_strchr(check->content, '\n'))
-        //     break;
-        check = check->next;
-    }
-	printf("%ld = LEN MALLOC\n",len_malloc);
+	while (check)
+	{
+		newline_pos = ft_strchr(check->content, '\n');
+		if (newline_pos)
+		{
+			len_malloc += (newline_pos - check->content + 1);
+			break;
+		}
+		len_malloc += ft_strlen(check->content);
+		check = check->next;
+	}
+
 	line = ft_copy(line, len_malloc, buffer);
+
+	 if (newline_pos)
+    {
+    	remaining_len = ft_strlen(newline_pos + 1);
+       ft_memmove((*buffer)->content, newline_pos + 1, remaining_len + 1);
+    }
+	printf("BUFFER TETE DE LISTE APRES EXTRACT LINE= %s\n\n",(*buffer)->content);
 	return (line);
 }
 
 
-t_chain *ft_add_node(t_chain **buffer)
+t_chain	*ft_add_node(t_chain **buffer)
 {
-    t_chain *current;
-    t_chain *new_node;
+	t_chain *current;
 
-    if (!buffer)
-        return (NULL);
-    current = *buffer;
-    if (!current)
-    {
-        new_node = (t_chain *)malloc(sizeof(t_chain));
-        if (!new_node)
-            return (NULL);
-        new_node->next = NULL;
-        new_node->content = malloc(sizeof(char) * (BUFFER_SIZE + 1));
-        if (!new_node->content)
-        {
-            free(new_node);
-            return (NULL);
-        }
-        new_node->content[0] = '\0';
-        *buffer = new_node;
-        return (new_node);
-    }
-    while (current->next != NULL)
-        current = current->next;
-    new_node = (t_chain *)malloc(sizeof(t_chain));
-    if (!new_node)
-        return (NULL);
-    new_node->next = NULL;
-    new_node->content = malloc(sizeof(char) * (BUFFER_SIZE + 1));
-    if (!new_node->content)
-    {
-        free(new_node);
-        return (NULL);
-    }
-    new_node->content[0] = '\0';
-    current->next = new_node;
-    return (new_node);
+	if (!buffer)
+		return (NULL);
+	current = *buffer;
+	while (current && current->next != NULL)
+		current = current->next;
+
+	t_chain *new_node = (t_chain *)malloc(sizeof(t_chain));
+	if (!new_node)
+		return (NULL);
+	new_node->next = NULL;
+	new_node->content[0] = '\0';
+	if (current)
+		current->next = new_node;
+	else
+		*buffer = new_node;
+
+	return (new_node);
 }
-
 
 
 
@@ -106,17 +83,13 @@ ssize_t ft_read_and_stock(int fd, t_chain **buffer)
         if (readed > 0)
         {
             current->content[readed] = '\0';
-            printf("Current node : %s\n", current->content);
             if (ft_strchr(current->content, '\n'))
                 break;
             if (!ft_add_node(buffer))
                 return (-1);
-			if (!current->content)
-                return (-1);
 			current = current->next;
         }
     }
-	printf("BFER = %s",(*buffer)->content);
     return (readed);
 }
 
@@ -140,7 +113,7 @@ char	*get_next_line(int fd)
 	}
 	line = NULL;
 	line = ft_extract_line(&buffer, line);
-	ft_free_chain(&buffer);
+	// ft_free_chain(&buffer);
 	return (line);
 }
 

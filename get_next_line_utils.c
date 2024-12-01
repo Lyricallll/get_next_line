@@ -6,7 +6,7 @@
 /*   By: agraille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 09:01:28 by agraille          #+#    #+#             */
-/*   Updated: 2024/11/30 21:58:49 by agraille         ###   ########.fr       */
+/*   Updated: 2024/12/01 11:48:34 by agraille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ void	ft_free_chain(t_chain **buffer)
 	while (*buffer)
 	{
 		tmp = (*buffer)->next;
-		free((*buffer)->content);
 		free(*buffer);
 		*buffer = tmp;
 	}
@@ -52,6 +51,7 @@ ssize_t	ft_strlen(char *s)
 char	*ft_copy(char *line, ssize_t len_malloc, t_chain **buffer)
 {
 	t_chain	*ptr;
+	t_chain	*tmp;
 	ssize_t	i;
 	ssize_t	j;
 	
@@ -64,12 +64,16 @@ char	*ft_copy(char *line, ssize_t len_malloc, t_chain **buffer)
 	while (i < len_malloc)
 	{
 		line[i++] = ptr->content[j++];
-		if (ptr->content[j] == '\0')
+		if (j >= BUFFER_SIZE || ptr->content[j] == '\0')
 		{
 			if(ptr->next == NULL)
 				break;
 			j = 0;
+			tmp = ptr;
 			ptr = ptr->next;
+			if (tmp == *buffer)
+				*buffer = ptr;
+			free(tmp);
 		}
 	}
 	line[i] = '\0';

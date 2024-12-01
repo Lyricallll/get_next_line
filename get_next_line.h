@@ -6,7 +6,7 @@
 /*   By: agraille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 09:01:25 by agraille          #+#    #+#             */
-/*   Updated: 2024/11/30 21:50:07 by agraille         ###   ########.fr       */
+/*   Updated: 2024/12/01 11:33:22 by agraille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,12 @@
 # include <fcntl.h>
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 1
+#  define BUFFER_SIZE 4
 # endif
 
 typedef struct s_gnl
 {
-	char			*content;
+	char			content[BUFFER_SIZE + 1];
 	struct s_gnl	*next;
 }	t_chain;
 

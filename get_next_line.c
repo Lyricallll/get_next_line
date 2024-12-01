@@ -6,7 +6,7 @@
 /*   By: agraille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 08:00:05 by agraille          #+#    #+#             */
-/*   Updated: 2024/12/01 23:09:03 by agraille         ###   ########.fr       */
+/*   Updated: 2024/12/01 23:23:13 by agraille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,23 +83,21 @@ ssize_t	ft_read_and_stock(int fd, t_chain **buffer)
 {
 	t_chain	*current;
 	ssize_t	readed;
-	size_t	c;
 
 	current = *buffer;
 	readed = 1;
-	if (!current)
-	{
-		if (!ft_add_node(buffer))
-			return (-1);
-		current = *buffer;
-	}
 	while (readed > 0)
 	{
-		c = ft_strlen(current->content);
-		readed = read(fd, current->content + c, BUFFER_SIZE - c);
+		if (current->content[0] != '\0')
+		{
+			if (!ft_add_node(buffer))
+				return (-1);
+			current = current->next;
+		}
+		readed = read(fd, current->content, BUFFER_SIZE);
 		if (readed > 0)
 		{
-			current->content[c + readed] = '\0';
+			current->content[readed] = '\0';
 			if (ft_strchr(current->content, '\n'))
 				break ;
 			if (!ft_add_node(buffer))

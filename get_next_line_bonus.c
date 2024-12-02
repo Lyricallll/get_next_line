@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: agraille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/26 08:00:05 by agraille          #+#    #+#             */
-/*   Updated: 2024/12/02 21:42:25 by agraille         ###   ########.fr       */
+/*   Created: 2024/12/02 21:35:54 by agraille          #+#    #+#             */
+/*   Updated: 2024/12/02 21:47:19 by agraille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 int	ft_check_if_line_possible(t_chain *buffer)
 {
@@ -109,48 +109,29 @@ ssize_t	ft_read_and_stock(int fd, t_chain **buffer)
 
 char	*get_next_line(int fd)
 {
-	static t_chain	*buffer;
+	static t_chain	*buffer[MAX_FD];
 	char			*line;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
+	if (fd < 0 || fd >= MAX_FD || BUFFER_SIZE <= 0)
 		return (NULL);
 	line = NULL;
-	if (!buffer && !ft_add_node(&buffer))
+	if (!buffer[fd] && !ft_add_node(&buffer[fd]))
 		return (NULL);
-	if (!ft_check_if_line_possible(buffer))
+	if (!ft_check_if_line_possible(buffer[fd]))
 	{
-		if (ft_read_and_stock(fd, &buffer) <= 0)
+		if (ft_read_and_stock(fd, &buffer[fd]) <= 0)
 		{
-			if (buffer && buffer->content[0] != '\0')
-				line = ft_extract_line(&buffer, line);
-			ft_free_chain(&buffer);
+			if (buffer[fd] && buffer[fd]->content[0] != '\0')
+				line = ft_extract_line(&buffer[fd], line);
+			ft_free_chain(&buffer[fd]);
 			return (line);
 		}
 	}
-	line = ft_extract_line(&buffer, line);
+	line = ft_extract_line(&buffer[fd], line);
 	if (!line || line[0] == '\0')
 	{
-		ft_free_chain(&buffer);
+		ft_free_chain(&buffer[fd]);
 		return (NULL);
 	}
 	return (line);
 }
-
-// int	main(void)
-// {
-// 	int		fd;
-// 	char	*line;
-
-// 	fd = open("43_no_nl.txt", O_RDONLY);
-// 	if (fd < 0)
-// 		return (1);
-// 	line = get_next_line(fd);
-// 	while (line != NULL)
-// 	{
-// 		printf("%s", line);
-// 		free(line);
-// 		line = get_next_line(fd);
-// 	}
-// 	close(fd);
-// 	return (0);
-// }

@@ -6,7 +6,7 @@
 /*   By: agraille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 08:00:05 by agraille          #+#    #+#             */
-/*   Updated: 2024/12/01 23:23:13 by agraille         ###   ########.fr       */
+/*   Updated: 2024/12/02 13:20:46 by agraille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,50 +110,46 @@ ssize_t	ft_read_and_stock(int fd, t_chain **buffer)
 
 char	*get_next_line(int fd)
 {
-	static t_chain			*buffer;
-	char					*line;
+	static t_chain	*buffer;
+	char			*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	if (!buffer)
-	{
-		if (!ft_add_node(&buffer))
-			return (NULL);
-	}
 	line = NULL;
-	if (ft_check_if_line_possible(buffer))
-		line = ft_extract_line(&buffer, line);
-	else
+	if (!buffer && !ft_add_node(&buffer))
+		return (NULL);
+	if (!ft_check_if_line_possible(buffer))
 	{
-		if (ft_read_and_stock(fd, &buffer) == -1)
+		if (ft_read_and_stock(fd, &buffer) <= 0)
+		{
+			ft_free_chain(&buffer);
 			return (NULL);
-		line = ft_extract_line(&buffer, line);
+		}
+	}
+	line = ft_extract_line(&buffer, line);
+	if (!line || line[0] == '\0')
+	{
+		ft_free_chain(&buffer);
+		return (NULL);
 	}
 	return (line);
 }
 
-// int main(void)
+// int	main(void)
 // {
-// 	int fd;
-// 	char *test;
-// 	fd = open("test.txt", O_RDONLY);
+// 	int		fd;
+// 	char	*line;
+
+// 	fd = open("big_line_no_nl", O_RDONLY);
 // 	if (fd < 0)
-// 	{ 
-// 		perror("open");
 // 		return (1);
+// 	line = get_next_line(fd);
+// 	while (line != NULL)
+// 	{
+// 		printf("%s", line);
+// 		free(line);
+// 		line = get_next_line(fd);
 // 	}
-// 		test = get_next_line(fd);
-// 		printf("LINE : %s", test); 
-// 		free(test);
-// 	printf("---------------------------------\n");
-// 			test = get_next_line(fd);
-// 		printf("LINE : %s", test); 
-// 		free(test);
-// 	printf("---------------------------------\n");
-// 		test = get_next_line(fd);
-// 		printf("LINE : %s", test); 
-// 		free(test);
-// 	printf("---------------------------------\n");
-// 	close(fd); 
-// 	return (0); 
+// 	close(fd);
+// 	return (0);
 // }

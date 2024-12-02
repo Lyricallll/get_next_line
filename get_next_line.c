@@ -6,7 +6,7 @@
 /*   By: agraille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 08:00:05 by agraille          #+#    #+#             */
-/*   Updated: 2024/12/02 13:20:46 by agraille         ###   ########.fr       */
+/*   Updated: 2024/12/02 15:20:10 by agraille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,11 @@ char	*ft_extract_line(t_chain **buffer, char *line)
 {
 	t_chain		*check;
 	ssize_t		len_malloc;
-	size_t		remaining_len;
 	char		*newline_pos;
 
 	check = *buffer;
 	len_malloc = 0;
+	newline_pos = NULL;
 	while (check)
 	{
 		newline_pos = ft_strchr(check->content, '\n');
@@ -51,11 +51,15 @@ char	*ft_extract_line(t_chain **buffer, char *line)
 	line = ft_copy(line, len_malloc, buffer);
 	if (newline_pos)
 	{
-		remaining_len = ft_strlen(newline_pos + 1);
-		ft_memmove((*buffer)->content, newline_pos + 1, remaining_len + 1);
+		ft_memmove((*buffer)->content, newline_pos + 1, ft_strlen(newline_pos + 1) + 1);
+	}
+	else
+	{
+		ft_free_chain(buffer);
 	}
 	return (line);
 }
+
 
 t_chain	*ft_add_node(t_chain **buffer)
 {
@@ -122,8 +126,10 @@ char	*get_next_line(int fd)
 	{
 		if (ft_read_and_stock(fd, &buffer) <= 0)
 		{
+			if (buffer && buffer->content[0] != '\0')
+				line = ft_copy(line, ft_strlen(buffer->content), &buffer);
 			ft_free_chain(&buffer);
-			return (NULL);
+			return (line);
 		}
 	}
 	line = ft_extract_line(&buffer, line);
@@ -135,17 +141,18 @@ char	*get_next_line(int fd)
 	return (line);
 }
 
+
 // int	main(void)
 // {
 // 	int		fd;
 // 	char	*line;
 
-// 	fd = open("big_line_no_nl", O_RDONLY);
+// 	fd = open("43_no_nl.txt", O_RDONLY);
 // 	if (fd < 0)
 // 		return (1);
 // 	line = get_next_line(fd);
-// 	while (line != NULL)
 // 	{
+// 	while (line != NULL)
 // 		printf("%s", line);
 // 		free(line);
 // 		line = get_next_line(fd);

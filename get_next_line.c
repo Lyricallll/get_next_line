@@ -6,7 +6,7 @@
 /*   By: agraille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 08:00:05 by agraille          #+#    #+#             */
-/*   Updated: 2024/12/02 15:23:15 by agraille         ###   ########.fr       */
+/*   Updated: 2024/12/02 15:55:05 by agraille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,30 +32,29 @@ char	*ft_extract_line(t_chain **buffer, char *line)
 {
 	t_chain		*check;
 	ssize_t		len_malloc;
-	char		*newline_pos;
+	char		*n_pos;
 
 	check = *buffer;
 	len_malloc = 0;
-	newline_pos = NULL;
+	n_pos = NULL;
 	while (check)
 	{
-		newline_pos = ft_strchr(check->content, '\n');
-		if (newline_pos)
+		n_pos = ft_strchr(check->content, '\n');
+		if (n_pos)
 		{
-			len_malloc += (newline_pos - check->content + 1);
+			len_malloc += (n_pos - check->content + 1);
 			break ;
 		}
 		len_malloc += ft_strlen(check->content);
 		check = check->next;
 	}
 	line = ft_copy(line, len_malloc, buffer);
-	if (newline_pos)
+	if (n_pos)
 	{
-		ft_memmove((*buffer)->content, newline_pos + 1, ft_strlen(newline_pos + 1) + 1);
+		ft_memmove((*buffer)->content, n_pos + 1, ft_strlen(n_pos + 1) + 1);
 	}
 	return (line);
 }
-
 
 t_chain	*ft_add_node(t_chain **buffer)
 {
@@ -137,7 +136,6 @@ char	*get_next_line(int fd)
 	return (line);
 }
 
-
 // int	main(void)
 // {
 // 	int		fd;
@@ -147,8 +145,8 @@ char	*get_next_line(int fd)
 // 	if (fd < 0)
 // 		return (1);
 // 	line = get_next_line(fd);
-// 	{
 // 	while (line != NULL)
+// 	{
 // 		printf("%s", line);
 // 		free(line);
 // 		line = get_next_line(fd);

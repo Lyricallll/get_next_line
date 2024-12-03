@@ -6,7 +6,7 @@
 /*   By: agraille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 21:38:05 by agraille          #+#    #+#             */
-/*   Updated: 2024/12/02 21:38:16 by agraille         ###   ########.fr       */
+/*   Updated: 2024/12/03 10:04:04 by agraille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void	ft_free_chain(t_chain **buffer)
 	while (*buffer)
 	{
 		tmp = (*buffer)->next;
+		ft_memmove((*buffer)->content, 0, 0);
 		free(*buffer);
 		*buffer = NULL;
 		*buffer = tmp;
@@ -47,30 +48,27 @@ ssize_t	ft_strlen(char *s)
 	return (i);
 }
 
-char	*ft_copy(char *line, ssize_t len_malloc, t_chain **buffer)
+char	*ft_copy(char *line, size_t len, t_chain **buffer, size_t j)
 {
 	t_chain	*ptr;
 	t_chain	*tmp;
-	ssize_t	i;
-	ssize_t	j;
+	size_t	i;
 
 	i = 0;
-	j = 0;
 	ptr = *buffer;
-	line = malloc(sizeof(char) * (len_malloc + 1));
+	line = malloc(sizeof(char) * (len + 1));
 	if (!line)
 		return (NULL);
-	while (i < len_malloc)
+	while (i < len)
 	{
-		if (j >= BUFFER_SIZE || ptr->content[j] == '\0')
+		if (ptr->content[j] == '\0')
 		{
 			if (ptr->next == NULL)
 				break ;
 			j = 0;
 			tmp = ptr;
 			ptr = ptr->next;
-			if (tmp == *buffer)
-				*buffer = ptr;
+			*buffer = ptr;
 			free(tmp);
 		}
 		line[i++] = ptr->content[j++];

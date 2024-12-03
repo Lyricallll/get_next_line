@@ -6,7 +6,7 @@
 /*   By: agraille <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 21:35:54 by agraille          #+#    #+#             */
-/*   Updated: 2024/12/02 21:47:19 by agraille         ###   ########.fr       */
+/*   Updated: 2024/12/03 10:35:24 by agraille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,24 +31,24 @@ int	ft_check_if_line_possible(t_chain *buffer)
 char	*ft_extract_line(t_chain **buffer, char *line)
 {
 	t_chain		*check;
-	ssize_t		len_malloc;
+	size_t		len;
 	char		*n_pos;
 
 	check = *buffer;
-	len_malloc = 0;
+	len = 0;
 	n_pos = NULL;
 	while (check)
 	{
 		n_pos = ft_strchr(check->content, '\n');
 		if (n_pos)
 		{
-			len_malloc += (n_pos - check->content + 1);
+			len += (n_pos - check->content + 1);
 			break ;
 		}
-		len_malloc += ft_strlen(check->content);
+		len += ft_strlen(check->content);
 		check = check->next;
 	}
-	line = ft_copy(line, len_malloc, buffer);
+	line = ft_copy(line, len, buffer, 0);
 	if (n_pos)
 	{
 		ft_memmove((*buffer)->content, n_pos + 1, ft_strlen(n_pos + 1) + 1);
@@ -56,7 +56,7 @@ char	*ft_extract_line(t_chain **buffer, char *line)
 	return (line);
 }
 
-t_chain	*ft_add_node(t_chain **buffer)
+t_chain	*ft_add(t_chain **buffer)
 {
 	t_chain	*current;
 	t_chain	*new_node;
@@ -89,7 +89,7 @@ ssize_t	ft_read_and_stock(int fd, t_chain **buffer)
 	{
 		if (current->content[0] != '\0')
 		{
-			if (!ft_add_node(buffer))
+			if (!ft_add(buffer))
 				return (-1);
 			current = current->next;
 		}
@@ -99,7 +99,7 @@ ssize_t	ft_read_and_stock(int fd, t_chain **buffer)
 			current->content[readed] = '\0';
 			if (ft_strchr(current->content, '\n'))
 				break ;
-			if (!ft_add_node(buffer))
+			if (!ft_add(buffer))
 				return (-1);
 			current = current->next;
 		}
@@ -109,29 +109,50 @@ ssize_t	ft_read_and_stock(int fd, t_chain **buffer)
 
 char	*get_next_line(int fd)
 {
-	static t_chain	*buffer[MAX_FD];
+	static t_chain	*b[MAX];
 	char			*line;
+	ssize_t			i;
 
-	if (fd < 0 || fd >= MAX_FD || BUFFER_SIZE <= 0)
+	if (fd < 0 || fd >= MAX || BUFFER_SIZE <= 0 || (!b[fd] && !ft_add(&b[fd])))
 		return (NULL);
 	line = NULL;
-	if (!buffer[fd] && !ft_add_node(&buffer[fd]))
-		return (NULL);
-	if (!ft_check_if_line_possible(buffer[fd]))
+	if (!ft_check_if_line_possible(b[fd]))
 	{
-		if (ft_read_and_stock(fd, &buffer[fd]) <= 0)
+		i = ft_read_and_stock(fd, &b[fd]);
+		if (i <= 0)
 		{
-			if (buffer[fd] && buffer[fd]->content[0] != '\0')
-				line = ft_extract_line(&buffer[fd], line);
-			ft_free_chain(&buffer[fd]);
+			if (i == 0 && b[fd] && b[fd]->content[0] != '\0')
+				line = ft_extract_line(&b[fd], line);
+			ft_free_chain(&b[fd]);
 			return (line);
+			if (i == -1)
+			{
+				ft_free_chain(&b[fd]);
+				return (NULL);
+			}
 		}
 	}
-	line = ft_extract_line(&buffer[fd], line);
-	if (!line || line[0] == '\0')
-	{
-		ft_free_chain(&buffer[fd]);
-		return (NULL);
-	}
+	line = ft_extract_line(&b[fd], line);
 	return (line);
 }
+
+// #include <stdio.h>
+
+// int	main(void)
+// {
+// 	int		fd;
+// 	char	*line;
+
+// 	fd = open("read_error.txt", O_RDONLY);
+// 	if (fd < 0)
+// 		return (1);
+// 	line = get_next_line(fd);
+// 	while (line != NULL)
+// 	{
+// 		printf("%s", line);
+// 		free(line);
+// 		line = get_next_line(fd);
+// 	}
+// 	close(fd);
+// 	return (0);
+// }
